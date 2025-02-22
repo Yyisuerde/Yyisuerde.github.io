@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Q版笑脸</title>
+  <title>Yisuerde</title>
   <style>
     body {
       display: flex;
@@ -27,11 +27,11 @@
     .face {
       width: 200px;
       height: 200px;
-      background-color: #fce187; /* 更淡的黄色 */
+      background-color: #fce187;
       border-radius: 50%;
       position: relative;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      z-index: 1; /* 确保笑脸在按钮下方 */
+      z-index: 1; 
     }
 
     .eye {
@@ -192,7 +192,6 @@
         eye.style.transform = `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px)`;
       });
 
-      // 计算嘴巴的表情
       if (mouseX < faceCenterX) {
         // 鼠标在左边，笑脸
         mouth.style.borderRadius = '40px 40px 10px 10px';
