@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Q版笑脸</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+      overflow: hidden;
+      flex-direction: column;
+    }
+
+    .text {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 20px;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+    }
+
+    .face {
+      width: 200px;
+      height: 200px;
+      background-color: #fce187; /* 更淡的黄色 */
+      border-radius: 50%;
+      position: relative;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1; /* 确保笑脸在按钮下方 */
+    }
+
+    .eye {
+      width: 45px;
+      height: 45px;
+      background-color: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 50px; /* 眼睛位置 */
+    }
+
+    .eye-left {
+      left: 46px; /* 左眼位置 */
+    }
+
+    .eye-right {
+      left: 106px; /* 右眼位置 */
+    }
+
+    .pupil {
+      width: 20px;
+      height: 20px;
+      background-color: black;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 0.1s ease; /* 加入过渡效果 */
+    }
+
+    .mouth {
+      width: 100px; /* 嘴巴宽度 */
+      height: 50px; /* 嘴巴高度保持一致 */
+      background-color: red;
+      border-radius: 40px 40px 20px 20px; /* 调整为嘴角更圆滑 */
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: all 0.2s ease; /* 加入过渡效果 */
+    }
+
+    .tongue {
+      width: 60px;
+      height: 30px;
+      background-color: #9b2c2c;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .tooth {
+      width: 15px;
+      height: 15px;
+      background-color: white;
+      position: absolute;
+      top: 1px;
+      right: 20px;
+      border-radius: 5px;
+    }
+
+    .blush {
+      width: 40px;
+      height: 25px;
+      background-color: #f4a6c1;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 80px;
+    }
+
+    .blush-left {
+      left: 20px;
+    }
+
+    .blush-right {
+      right: 20px;
+    }
+
+    /* 按钮样式 */
+    .button {
+      position: absolute;
+      bottom: -70px; /* 增大与笑脸的距离 */
+      width: 80px;
+      height: 30px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      z-index: 2; /* 确保按钮位于笑脸的上方 */
+    }
+
+    .button:hover {
+      background-color: #45a049;
+    }
+
+    .button-left {
+      left: 0px; /* 左侧按钮位置 */
+    }
+
+    .button-right {
+      right: 0px; /* 右侧按钮位置 */
+    }
+  </style>
+</head>
+<body>
+  <div class="text">请和我交往~</div>
+  <div class="face">
+    <div class="eye eye-left">
+      <div class="pupil"></div>
+    </div>
+    <div class="eye eye-right">
+      <div class="pupil"></div>
+    </div>
+    <div class="mouth">
+      <div class="tongue"></div>
+      <div class="tooth"></div>
+    </div>
+    <div class="blush blush-left"></div>
+    <div class="blush blush-right"></div>
+    <!-- 添加按钮 -->
+    <button class="button button-left">拒绝</button>
+    <button class="button button-right">同意</button>
+  </div>
+
+  <script>
+    const eyes = document.querySelectorAll('.pupil');
+    const mouth = document.querySelector('.mouth');
+    const face = document.querySelector('.face');
+    const body = document.querySelector('body');
+    const rejectButton = document.querySelector('.button-left');
+    const agreeButton = document.querySelector('.button-right');
+
+    body.addEventListener('mousemove', (e) => {
+      const faceRect = face.getBoundingClientRect();
+      const mouseX = e.clientX;
+      const faceCenterX = faceRect.left + faceRect.width / 2;
+
+      // 计算眼睛跟随鼠标
+      eyes.forEach(eye => {
+        const eyeRect = eye.getBoundingClientRect();
+        const eyeCenterX = eyeRect.left + eyeRect.width / 2;
+        const eyeCenterY = eyeRect.top + eyeRect.height / 2;
+
+        const deltaX = mouseX - eyeCenterX;
+        const deltaY = e.clientY - eyeCenterY;
+        const angle = Math.atan2(deltaY, deltaX);
+
+        const distance = Math.min(10, Math.hypot(deltaX, deltaY)); // 限制最大偏移距离
+        const offsetX = distance * Math.cos(angle);
+        const offsetY = distance * Math.sin(angle);
+
+        eye.style.transform = `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px)`;
+      });
+
+      // 计算嘴巴的表情
+      if (mouseX < faceCenterX) {
+        // 鼠标在左边，笑脸
+        mouth.style.borderRadius = '40px 40px 10px 10px';
+      } else {
+        // 鼠标在右边，哭脸
+        mouth.style.borderRadius = '10px 10px 40px 40px';
+      }
+    });
+
+    // 按钮点击事件
+    rejectButton.addEventListener('click', () => {
+      alert('你在我的剧本里杀青啦！');
+    });
+
+    agreeButton.addEventListener('click', () => {
+      alert('每当太阳升起，我们都会比前一天更幸福！');
+    });
+  </script>
+</body>
+</html>
